@@ -45,6 +45,19 @@ namespace lmm {
 		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 	};
+
+	const glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
 	int light() {
 		GLFWwindow*  window = Init();
 		Shader light_shader("color.vs", "color.fs");
@@ -93,6 +106,8 @@ namespace lmm {
 		// use index 0 texture;
 		//light_shader.setInt("material.diffuse", 0);
 		unsigned int  diffuse_map = setTexture("./images/container2.png", light_shader, "material.diffuse", 0, true);
+
+		unsigned int specular_map = setTexture("./images/container2_specular.png", light_shader, "material.specular", 1, true);
 		// render loop
 		while (!glfwWindowShouldClose(window)) {
 			float currentFrame = glfwGetTime();
@@ -119,49 +134,65 @@ namespace lmm {
 			light_shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 			light_shader.setVec3("lightPos", lightPos);
 			light_shader.setVec3("viewPos", camera.m_camera_position);
-			
+			glCheckError();
 			//object's self color
 			//light_shader.setVec3("material.ambient", 0.2f, 0.2f, 0.2f);
 			//light_shader.setVec3("material.diffuse", 0.5f, 0.5f, 0.5f);
-			light_shader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			//light_shader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 			light_shader.setFloat("material.shininess", 32.0f);
 			//object light attribute
 			light_shader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 			light_shader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 			light_shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-			light_shader.setVec3("light.position",lightPos);
+			//light_shader.setVec3("light.position",lightPos);
+			light_shader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
 			//set view / projection glm::radians(camera.m_zoom) is to calculate the fovy
 			glm::mat4 projection = glm::perspective(glm::radians(camera.m_zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			//this is glm::LookAt function
 			glm::mat4 view = camera.GetViewMatrix();
 			light_shader.setMat4("projection", projection);
 			light_shader.setMat4("view", view);
-
+			glCheckError();
 			//world transformation
 			glm::mat4 model = glm::mat4(1);
 			light_shader.setMat4("model", model);
-
+			glCheckError();
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, diffuse_map);
+			glCheckError();
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, specular_map);
+			glCheckError();
 			//render the cube
 			glBindVertexArray(cubeVAO);
-			glCheckError();
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-			glCheckError();
+
+
+			for (unsigned int i = 0; i < 10; i++) {
+				glm::mat4 model = glm::mat4(1);
+				model = glm::translate(model, cubePositions[i]);
+				float angle = 20.0f * i;
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+				light_shader.setMat4("model", model);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+				glCheckError();
+			}
+
 			//std::cout << glGetError() << std::endl;
 
+
+
 			//lamp draw
-			lamp_shader.use();
-			lamp_shader.setMat4("projection", projection);
-			lamp_shader.setMat4("view", view);
-			model = glm::mat4(1);
-			model = glm::translate(model, lightPos);
-			model = glm::scale(model, glm::vec3(0.2f));
-			lamp_shader.setMat4("model", model);
-			glBindVertexArray(lightVAO);
-			glCheckError();
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-			glCheckError();
+			//lamp_shader.use();
+			//lamp_shader.setMat4("projection", projection);
+			//lamp_shader.setMat4("view", view);
+			//model = glm::mat4(1);
+			//model = glm::translate(model, lightPos);
+			//model = glm::scale(model, glm::vec3(0.2f));
+			////lamp_shader.setMat4("model", model);
+			//glBindVertexArray(lightVAO);
+			//glCheckError();
+			//glDrawArrays(GL_TRIANGLES, 0, 36);
+			//glCheckError();
 			//std::cout << glGetError() << std::endl;
 
 			glfwSwapBuffers(window);
