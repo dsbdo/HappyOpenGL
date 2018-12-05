@@ -1,7 +1,10 @@
 #pragma once
 #ifndef SHADER_H
 #define SHADER_H
-#include <glad/glad.h>
+#include <GLEW/glew.h>
+#include<glm/glm.hpp>
+#include<glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -10,6 +13,7 @@ class Shader {
 public:
 	unsigned int ID;
 	//读取并构建着色器
+	Shader() {}
 	Shader(const GLchar* vertex_path, const GLchar* fragment_path) {
 		//通过文件路径读取shader 程序
 		using namespace::std;

@@ -19,21 +19,24 @@
     <Filter Include="Shader\Lighting">
       <UniqueIdentifier>{7e5b367a-ebbd-495b-9301-de6cbcd6a2a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\BreakoutGame">
+      <UniqueIdentifier>{935ed879-1588-41dc-9139-5bee6b6591b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
+    <ClCompile Include="BreakoutGame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestPiKaChu.cpp">
+    <ClCompile Include="Texture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="temp.cpp">
+    <ClCompile Include="GeniusRender.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Lighting.cpp">
+    <ClCompile Include="ResourceManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,6 +62,12 @@
     <None Include="color_temp2.fs">
       <Filter>Shader\Lighting</Filter>
     </None>
+    <None Include="genius.vs">
+      <Filter>Shader\BreakoutGame</Filter>
+    </None>
+    <None Include="genius.fs">
+      <Filter>Shader\BreakoutGame</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -70,22 +79,19 @@
     <ClInclude Include="Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Mtl.h">
+    <ClInclude Include="BreakoutGame.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="CommonFIle.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Group.h">
+    <ClInclude Include="GeniusRender.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Obj.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
+    <ClInclude Include="ResourceManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

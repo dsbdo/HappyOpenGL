@@ -81,7 +81,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;glut32.lib;glut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;glfw3dll.lib;glut32.lib;glut.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -121,31 +121,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="Lighting.cpp" />
+    <ClCompile Include="BreakoutGame.cpp" />
+    <ClCompile Include="GeniusRender.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="temp.cpp" />
-    <ClCompile Include="TestPiKaChu.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.fs" />
     <None Include="color.vs" />
     <None Include="color_temp2.fs" />
+    <None Include="genius.fs" />
+    <None Include="genius.vs" />
     <None Include="lamp.fs" />
     <None Include="lamp.vs" />
     <None Include="PiKaChu.fs" />
     <None Include="PiKaChu.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BreakoutGame.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Common.h" />
-    <ClInclude Include="Group.h" />
+    <ClInclude Include="CommonFIle.h" />
+    <ClInclude Include="GeniusRender.h" />
     <ClInclude Include="LoadImage.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mtl.h" />
-    <ClInclude Include="Obj.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
