@@ -26,6 +26,16 @@ namespace lmm {
 		//texture
 		ResourceManager::LoadTexture("./images/awesomeface.png", GL_TRUE, "face");
 
+
+		// Load textures
+		ResourceManager::LoadTexture("textures/background.jpg", GL_FALSE, "background");
+		ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, "face");
+		ResourceManager::LoadTexture("textures/block.png", GL_FALSE, "block");
+		ResourceManager::LoadTexture("textures/block_solid.png", GL_FALSE, "block_solid");
+		ResourceManager::LoadTexture("textures/paddle.png", true, "paddle");
+
+
+
 		genius_render_ = new GeniusRender( &ResourceManager::GetShader("genius"));
 
 	}

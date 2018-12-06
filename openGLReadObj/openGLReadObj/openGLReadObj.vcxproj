@@ -122,6 +122,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BreakoutGame.cpp" />
+    <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeniusRender.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -142,6 +144,8 @@
     <ClInclude Include="BreakoutGame.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonFIle.h" />
+    <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeniusRender.h" />
     <ClInclude Include="LoadImage.h" />
     <ClInclude Include="ResourceManager.h" />
