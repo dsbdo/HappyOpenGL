@@ -7,7 +7,6 @@
 //this is to record the function name for use.
 
 #include "BreakoutGame.h"
-
 #include "Texture.h"
 
 const GLuint K_SCREEN_WIDTH = 800;

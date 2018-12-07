@@ -1,5 +1,5 @@
 #pragma once
-#include <GLEW/glew.h>
+
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "GeniusRender.h"
@@ -19,7 +19,7 @@ namespace lmm {
 		GLboolean destroyed_;
 
 		//render state
-		Texture genius_;
+		Texture texture_;
 
 		virtual void draw(GeniusRender& genius);
 	};

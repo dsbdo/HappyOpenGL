@@ -11,6 +11,8 @@ namespace lmm {
 	GeniusRender::~GeniusRender()
 	{
 	}
+
+
 	void GeniusRender::drawGenius(Texture* texture, glm::vec2 position, glm::vec2 size, GLfloat rotate, glm::vec3 color)
 	{
 		//prepare to transform 
@@ -30,6 +32,7 @@ namespace lmm {
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 	}
+	
 	void GeniusRender::initRenderData()
 	{
 		GLuint VBO;
@@ -54,7 +57,8 @@ namespace lmm {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 	}
-}
+
+}//namespace lmm over
 
 
 

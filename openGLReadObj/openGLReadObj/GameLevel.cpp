@@ -1,6 +1,7 @@
 #include "GameLevel.h"
 #include <fstream>
 #include <sstream>
+
 namespace lmm {
 	GameLevel::GameLevel()
 	{
@@ -51,7 +52,6 @@ namespace lmm {
 				return GL_FALSE;
 			}
 		}
-
 		return GL_TRUE;
 	}
 
@@ -67,7 +67,7 @@ namespace lmm {
 				{
 					glm::vec2 pos(unit_width * x, unit_height * y);
 					glm::vec2 size(unit_width, unit_height);
-					GameObject obj(pos, size, ResourceManager::GetTexture("solid_block"), glm::vec3(0.8f, 0.8f, 0.7f));
+					GameObject obj(pos, size, ResourceManager::GetTexture("block_solid"), glm::vec3(0.8f, 0.8f, 0.7f));
 					obj.is_solid_ = GL_TRUE;
 					this->bricks_.push_back(obj);
 				}

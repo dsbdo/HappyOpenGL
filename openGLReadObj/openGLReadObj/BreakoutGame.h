@@ -9,6 +9,8 @@
 #include "ResourceManager.h"
 #include "GeniusRender.h"
 #include "GameLevel.h"
+#include "BallObject.h"
+#include <GLFW/glfw3.h>
 namespace lmm {
 	enum GameState {
 		GAME_ACTIVE,
@@ -38,10 +40,15 @@ namespace lmm {
 		void processInput(GLfloat dt);
 		void update(GLfloat dt);
 		void render();
+
+
+		//check collision
+		void doCollisions();
+		bool checkCollision(GameObject &one, GameObject &two);
 	private:
 		GeniusRender* genius_render_;
 		GameObject* player_;
-
+		BallObject* ball_;
 	};
 
 }//namespace lmm over;
