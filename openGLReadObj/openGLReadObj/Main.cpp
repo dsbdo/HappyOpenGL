@@ -6,13 +6,14 @@
 
 //this is to record the function name for use.
 
-#include "BreakoutGame.h"
-#include "Texture.h"
 
+#include "JumpGame.h"
+#include "Texture.h"
+#include "ResourceManager.h"
 const GLuint K_SCREEN_WIDTH = 800;
 const GLuint K_SCREEN_HEIGHT = 600;
-
-lmm::BreakoutGame G_breakout(K_SCREEN_WIDTH, K_SCREEN_HEIGHT);
+lmm::JumpGame G_jump_game(K_SCREEN_HEIGHT, K_SCREEN_HEIGHT);
+//lmm::BreakoutGame G_breakout(K_SCREEN_WIDTH, K_SCREEN_HEIGHT);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 int main() {
 	using std::cout;
@@ -38,18 +39,22 @@ int main() {
 	//openGL configure
 	glViewport(0, 0, K_SCREEN_WIDTH, K_SCREEN_HEIGHT);
 	//this is face cull function enable to improve the render speed
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	//mix the original color and the target color
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	//take the render image to the target area
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//open depth test
+	glEnable(GL_DEPTH_TEST);
+	//G_breakout.init();
+	G_jump_game.init();
 
-	G_breakout.init();
 	//lmm::light();
 	//deltaTime 
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastFrame = 0.0f;
-	G_breakout.state_ = lmm::GameState::GAME_ACTIVE;
+	//G_breakout.state_ = lmm::GameState::GAME_ACTIVE;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Calculate delta time
@@ -57,18 +62,26 @@ int main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		glfwPollEvents();
-
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 		//deltaTime = 0.001f;
 		// Manage user input
-		G_breakout.processInput(deltaTime);
-
+		//G_breakout.processInput(deltaTime);
+		G_jump_game.processInput(deltaTime);
 		// Update Game state
-		G_breakout.update(deltaTime);
-
+		//G_breakout.update(deltaTime);
+		G_jump_game.update(deltaTime);
 		// Render
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		G_breakout.render();
+
+		
+		//shader.use();
+		//glBindVertexArray(VAO);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		////glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glBindVertexArray(0);
+		
+		//G_breakout.render();
+		G_jump_game.render();
 
 		glfwSwapBuffers(window);
 	}
@@ -84,9 +97,9 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key >= 0 && key < 1024)
 	{
-		if (action == GLFW_PRESS)
-			G_breakout.keys_[key] = GL_TRUE;
-		else if (action == GLFW_RELEASE)
-			G_breakout.keys_[key] = GL_FALSE;
+		if (action == GLFW_PRESS) {}
+			//G_breakout.keys_[key] = GL_TRUE;
+		else if (action == GLFW_RELEASE) {}
+			//G_breakout.keys_[key] = GL_FALSE;
 	}
 }

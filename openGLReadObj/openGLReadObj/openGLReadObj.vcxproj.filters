@@ -22,6 +22,12 @@
     <Filter Include="Shader\BreakoutGame">
       <UniqueIdentifier>{935ed879-1588-41dc-9139-5bee6b6591b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\JumpGame">
+      <UniqueIdentifier>{40546563-ccad-4a1e-b44e-dc242794abac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\JumpGame\background">
+      <UniqueIdentifier>{0ce7770b-641e-49b6-9a72-d749713f97da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -91,6 +97,12 @@
     </None>
     <None Include="genius.fs">
       <Filter>Shader\BreakoutGame</Filter>
+    </None>
+    <None Include="background.vs">
+      <Filter>Shader\JumpGame\background</Filter>
+    </None>
+    <None Include="background.fs">
+      <Filter>Shader\JumpGame\background</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
