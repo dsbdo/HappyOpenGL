@@ -28,30 +28,18 @@
     <Filter Include="Shader\JumpGame\background">
       <UniqueIdentifier>{0ce7770b-641e-49b6-9a72-d749713f97da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\JumpGame\cube">
+      <UniqueIdentifier>{bfabf993-bae4-4946-b146-ff41c4dddc0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BreakoutGame.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="GeniusRender.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLevel.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BallObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="JumpGame.cpp">
@@ -104,6 +92,12 @@
     <None Include="background.fs">
       <Filter>Shader\JumpGame\background</Filter>
     </None>
+    <None Include="cube.vs">
+      <Filter>Shader\JumpGame\cube</Filter>
+    </None>
+    <None Include="cube.fs">
+      <Filter>Shader\JumpGame\cube</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -115,28 +109,10 @@
     <ClInclude Include="Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BreakoutGame.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CommonFIle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GeniusRender.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GameLevel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BallObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="JumpGame.h">

@@ -10,10 +10,11 @@ enum CameraMovement {
 	BACKWARD,
 	LEFT,
 	RIGHT,
-	SPACE
+	SPACE,
+	ROTATE
 };
 const float YAW = -90.0f; //Æ«º½½Ç
-const float PITCH = 0.0f; //¸©Ñö½Ç
+const float PITCH = -89.0f; //¸©Ñö½Ç
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f; //Êó±êÁéÃô¶È
 const float ZOOM = 45.0f; //ÉãÏñ»úÊÓ½Ç
@@ -41,6 +42,7 @@ public:
 		m_yaw = camera_yaw;
 		m_pitch = camera_pitch;
 	}
+
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float camera_yaw, float camera_pitch) {
 		m_camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
 		m_movement_speed = SPEED;
@@ -52,6 +54,7 @@ public:
 		m_pitch = camera_pitch;
 	}
 	glm::mat4 GetViewMatrix() {
+		//
 		return glm::lookAt(m_camera_position, m_camera_position + m_camera_front, m_camera_up);
 	}
 	void ProcessKeyboard(CameraMovement direction, float deltaTime)
@@ -65,6 +68,9 @@ public:
 			m_camera_position -= m_camera_right * velocity;
 		if (direction == RIGHT)
 			m_camera_position += m_camera_right * velocity;
+		if (direction == ROTATE) {
+
+		}
 	/*	if () {
 			float camX = sin(glfwGetTime()) * radius;
 			float camZ = cos(glfwGetTime()) * radius;
@@ -73,6 +79,7 @@ public:
 	void updateCameraPosition(glm::vec3 position) {
 		m_camera_position = position;
 	}
+
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 	void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
 	{
@@ -113,8 +120,9 @@ private:
 		// Calculate the new Front vector
 		glm::vec3 front;
 		front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
-		front.y = sin(glm::radians(m_pitch));
+		front.y =  sin(glm::radians(m_pitch));
 		front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+
 		m_camera_front = glm::normalize(front);
 		// Also re-calculate the Right and Up vector
 		m_camera_right = glm::normalize(glm::cross(m_camera_front, m_world_up));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.

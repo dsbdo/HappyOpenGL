@@ -129,13 +129,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
-    <ClCompile Include="BallObject.cpp" />
-    <ClCompile Include="BreakoutGame.cpp" />
     <ClCompile Include="CubeRender.cpp" />
     <ClCompile Include="GameElement.cpp" />
-    <ClCompile Include="GameLevel.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GeniusRender.cpp" />
     <ClCompile Include="Human.cpp" />
     <ClCompile Include="JumpGame.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -148,6 +143,8 @@
     <None Include="color.fs" />
     <None Include="color.vs" />
     <None Include="color_temp2.fs" />
+    <None Include="cube.fs" />
+    <None Include="cube.vs" />
     <None Include="genius.fs" />
     <None Include="genius.vs" />
     <None Include="lamp.fs" />
@@ -157,15 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
-    <ClInclude Include="BallObject.h" />
-    <ClInclude Include="BreakoutGame.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CommonFIle.h" />
     <ClInclude Include="CubeRender.h" />
     <ClInclude Include="GameElement.h" />
-    <ClInclude Include="GameLevel.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GeniusRender.h" />
     <ClInclude Include="Human.h" />
     <ClInclude Include="JumpGame.h" />
     <ClInclude Include="LoadImage.h" />

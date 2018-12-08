@@ -13,7 +13,7 @@ namespace lmm {
 		~GameElement();
 		glm::vec2 position_;
 		GLuint VAO_;
-		virtual void draw(glm::vec2 size, GLfloat rotate, glm::vec3 color) = 0 ;
+		virtual void draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec2 size, GLfloat rotate, glm::vec3 color) = 0 ;
 		virtual void move() {};
 		virtual void reset() {};
 		virtual void initRenderData()=0;

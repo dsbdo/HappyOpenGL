@@ -14,7 +14,9 @@ const GLuint K_SCREEN_WIDTH = 800;
 const GLuint K_SCREEN_HEIGHT = 600;
 lmm::JumpGame G_jump_game(K_SCREEN_HEIGHT, K_SCREEN_HEIGHT);
 //lmm::BreakoutGame G_breakout(K_SCREEN_WIDTH, K_SCREEN_HEIGHT);
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode); 
+void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 int main() {
 	using std::cout;
 	using std::endl;
@@ -35,6 +37,9 @@ int main() {
 	glGetError();
 	//accept the keyboard input
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetScrollCallback(window, scrollCallback);
+
 
 	//openGL configure
 	glViewport(0, 0, K_SCREEN_WIDTH, K_SCREEN_HEIGHT);
@@ -63,7 +68,7 @@ int main() {
 		lastFrame = currentFrame;
 		glfwPollEvents();
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//deltaTime = 0.001f;
 		// Manage user input
 		//G_breakout.processInput(deltaTime);
@@ -72,15 +77,6 @@ int main() {
 		//G_breakout.update(deltaTime);
 		G_jump_game.update(deltaTime);
 		// Render
-
-		
-		//shader.use();
-		//glBindVertexArray(VAO);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		////glDrawArrays(GL_TRIANGLES, 0, 3);
-		//glBindVertexArray(0);
-		
-		//G_breakout.render();
 		G_jump_game.render();
 
 		glfwSwapBuffers(window);
@@ -97,9 +93,24 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key >= 0 && key < 1024)
 	{
-		if (action == GLFW_PRESS) {}
+		if (action == GLFW_PRESS) {
+			G_jump_game.keys_[key] = GL_TRUE;
+		}
 			//G_breakout.keys_[key] = GL_TRUE;
-		else if (action == GLFW_RELEASE) {}
+
+
+		else if (action == GLFW_RELEASE) {
+			G_jump_game.keys_[key] = GL_FALSE;
+		}
 			//G_breakout.keys_[key] = GL_FALSE;
 	}
+}
+
+
+
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+	G_jump_game.processMouse(xpos, ypos);
+}
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	G_jump_game.processScroll(xoffset, yoffset);
 }

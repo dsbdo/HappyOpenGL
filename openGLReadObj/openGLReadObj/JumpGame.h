@@ -1,7 +1,10 @@
 #pragma once
+#include <vector>
 #include "Human.h"
 #include "Background.h"
 #include "ResourceManager.h"
+#include "CubeRender.h"
+#include "Camera.h"
 namespace lmm {
 	enum GameState {
 		GAME_ACTIVE,
@@ -31,6 +34,8 @@ namespace lmm {
 		//≥ı ºªØload the basic resource 
 		void init();
 		void processInput(GLfloat dt) ;
+		void processMouse(double xpos, double ypos);
+		void processScroll(double xoffset, double yoffset);
 		void update(GLfloat dt);
 
 		GLboolean game_state_;
@@ -40,6 +45,12 @@ namespace lmm {
 		Human* human;
 		Background* background;
 		//CubeRender* cube_render;
+		std::vector<CubeRender> cube_array_;
+		Camera* camera;
+		float last_x_;
+		float last_y_;
+		bool first_mouse_;
+
 	};
 }// namespce lmm over;
 
