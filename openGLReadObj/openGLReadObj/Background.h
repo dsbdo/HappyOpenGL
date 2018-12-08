@@ -7,20 +7,24 @@ namespace lmm {
 	{
 	public:
 		Background();
-		Background(glm::vec2 pos, Texture texture);
+		Background(glm::vec2 pos, Shader shader, Texture texture);
 		~Background();
 		virtual void initRenderData();
+		virtual void draw(glm::vec2 size, GLfloat rotate, glm::vec3 color);
 	private:
+		glm::vec2 position_;
 		Texture texture_;
+		Shader shader_;
+
 		const GLfloat vertices_[20] = {
-			-1.0f, -1.0f, 0.0f,     0.0f, 0.0f,
-			1.0f, -1.0f, 0.0f,       0.0f, 0.0f,
-			1.0f, 1.0f, 10.0f,		0.0f, 0.0f,
-			-1.0f, 1.0f, 10.0f,		0.0f, 0.0f
+			-0.5f, -1.0f, -0.5f,     0.0f, 0.0f,
+			0.5f, -1.0f, -0.5f,       0.0f, 0.0f,
+			0.5f, 0.5f, 0.5f,		0.0f, 0.0f,
+			-0.5f, 0.5f, 0.5f,		0.0f, 0.0f
 		};
 		const GLuint vertex_index_[6] = {
-			1,2,3,
-			3,4,1
+			0, 1, 2,
+			2, 3, 0
 		};
 
 	};

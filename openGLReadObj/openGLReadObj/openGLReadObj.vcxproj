@@ -143,6 +143,8 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="background.fs" />
+    <None Include="background.vs" />
     <None Include="color.fs" />
     <None Include="color.vs" />
     <None Include="color_temp2.fs" />
