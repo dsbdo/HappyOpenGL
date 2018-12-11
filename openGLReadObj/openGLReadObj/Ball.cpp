@@ -63,9 +63,12 @@ namespace lmm {
 			if (i == 1) {
 				top_indices_.push_back(0);
 			}
-			if (i == k_HORIZONTAL_SLICE - 1) {
+			else if (i == k_HORIZONTAL_SLICE - 1) {
 				//最后一圈的开始坐标
 				bottom_indices_.push_back(k_VERTICAL_SLICE * (i + 1));
+			}
+			else {
+				middle_indices_.push_back(i * k_VERTICAL_SLICE + 0);
 			}
 			for (GLuint j = 0; j <= k_VERTICAL_SLICE; j++) {
 				float horiaontal_angle = vertical_step * j;
@@ -88,14 +91,19 @@ namespace lmm {
 					if (i == 1 ) {
 						top_indices_.push_back(i * k_VERTICAL_SLICE + j);
 					}
-					if (i == k_HORIZONTAL_SLICE - 1) {
+					else if (i == k_HORIZONTAL_SLICE - 1) {
 						bottom_indices_.push_back(i * k_VERTICAL_SLICE + k_VERTICAL_SLICE - j);
 					}
 					else {
 						//中间的圆环
-
+						middle_indices_.push_back(i * k_VERTICAL_SLICE + j );
+						middle_indices_.push_back((i - 1)* k_VERTICAL_SLICE + j - 1);
+					}
+					if (j == k_VERTICAL_SLICE) {
+						//
 					}
 				}
+				
 			}
 			if (i > 0) {
 
