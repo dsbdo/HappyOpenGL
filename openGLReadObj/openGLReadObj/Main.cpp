@@ -10,6 +10,7 @@
 #include "JumpGame.h"
 #include "Texture.h"
 #include "ResourceManager.h"
+
 const GLuint K_SCREEN_WIDTH = 800;
 const GLuint K_SCREEN_HEIGHT = 600;
 lmm::JumpGame G_jump_game(K_SCREEN_HEIGHT, K_SCREEN_HEIGHT);
@@ -54,6 +55,96 @@ int main() {
 	//G_breakout.init();
 	G_jump_game.init();
 
+	//------------------------------------------------------
+	Shader shader = lmm::ResourceManager::GetShader("ball");
+	std::vector<GLfloat> vertices_;
+	std::vector<GLuint> indices_;
+	GLuint VAO_;
+	float radius = 2;
+	//经度方向
+	const int k_VERTICAL_SLICE = 100;
+	float vertical_step = (float)(glm::two_pi<float>() / k_VERTICAL_SLICE);
+	//纬度方向
+	const int k_HORIZONTAL_SLICE = 50;
+	float horizontal_step = (float)(glm::pi<float>() / k_HORIZONTAL_SLICE);
+	GLuint start_index = 0;
+	GLuint current_index = 0;
+	//longitude direction to get 50 circle with different radius
+	for (GLuint i = 0; i <= k_HORIZONTAL_SLICE; i++) {
+		start_index = current_index;
+		float vertical_angle = horizontal_step * i;
+		float z_coord = radius * cosf(vertical_angle);
+		float sub_radius = radius * sinf(vertical_angle);
+		//latitude direction to cut 100 block
+		for (GLuint j = 0; j <= k_VERTICAL_SLICE; j++) {
+			float horiaontal_angle = vertical_step * j;
+			float x_coord = sub_radius * cosf(horiaontal_angle);
+			float y_coord = sub_radius * sinf(horiaontal_angle);
+			//start point encounter end point
+			if (j == k_VERTICAL_SLICE) {
+				vertices_.push_back(vertices_[start_index]);
+				vertices_.push_back(vertices_[start_index + 1]);
+				vertices_.push_back(vertices_[start_index + 2]);
+			}
+			else {
+				//change the coordinate
+				vertices_.push_back(x_coord);
+				vertices_.push_back(z_coord);
+				vertices_.push_back(y_coord);
+			}
+			current_index += 3;
+			if (i > 0 && j > 0) {
+				unsigned int bottom_ring_a = (k_VERTICAL_SLICE + 1) * i + j;
+				unsigned int bottom_ring_b = (k_VERTICAL_SLICE + 1) * i + j - 1;
+				//next ring
+				unsigned int top_ring_a = (k_VERTICAL_SLICE + 1) * (i - 1) + j;
+				unsigned int top_ring_b = (k_VERTICAL_SLICE + 1) * (i - 1) + j - 1;
+				//j == 1
+				if (j == 1) {
+					indices_.push_back(bottom_ring_a);
+					indices_.push_back(top_ring_a);
+					indices_.push_back(top_ring_b);
+				}
+				//j == 
+				else if (j == k_HORIZONTAL_SLICE) {
+					indices_.push_back(bottom_ring_a);
+					indices_.push_back(top_ring_a);
+					indices_.push_back(bottom_ring_b);
+				}
+				else {
+					// 逆时钟方向连接顶点，每次连接成一个四边形
+					// 逆时钟方向避免三角形被背面剔除处理掉
+					indices_.push_back(bottom_ring_a);
+					indices_.push_back(top_ring_a);
+					indices_.push_back(top_ring_b);
+					indices_.push_back(bottom_ring_a);
+					indices_.push_back(top_ring_b);
+					indices_.push_back(bottom_ring_b);
+				}
+			}
+		}
+	}
+	GLuint VBO, IBO;
+	glGenVertexArrays(1, &VAO_);
+	glBindVertexArray(VAO_);
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof(GLfloat), vertices_.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+	//indices
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_.size() * sizeof(GLfloat), indices_.data(), GL_STATIC_DRAW);
+
+	//unbind
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	
+	//---------------------------------------------------------
+
+
 	//lmm::light();
 	//deltaTime 
 	GLfloat deltaTime = 0.0f;
@@ -79,6 +170,10 @@ int main() {
 		// Render
 		G_jump_game.render();
 
+		shader.use();
+		glBindVertexArray(VAO_);
+		glDrawElements(GL_LINE_STRIP, indices_.size(), GL_UNSIGNED_INT, (void*)0);
+		glBindVertexArray(0);
 		glfwSwapBuffers(window);
 	}
 	glfwTerminate();

@@ -31,6 +31,9 @@
     <Filter Include="Shader\JumpGame\cube">
       <UniqueIdentifier>{bfabf993-bae4-4946-b146-ff41c4dddc0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\JumpGame\ball">
+      <UniqueIdentifier>{e6426982-974b-428d-bec0-affafa94872f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -57,14 +60,11 @@
     <ClCompile Include="Background.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PiKaChu.vs">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="PiKaChu.fs">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="lamp.vs">
       <Filter>Shader\Lighting</Filter>
     </None>
@@ -98,6 +98,12 @@
     <None Include="cube.fs">
       <Filter>Shader\JumpGame\cube</Filter>
     </None>
+    <None Include="ball.vs">
+      <Filter>Shader\JumpGame\ball</Filter>
+    </None>
+    <None Include="ball.fs">
+      <Filter>Shader\JumpGame\ball</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -128,6 +134,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Background.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

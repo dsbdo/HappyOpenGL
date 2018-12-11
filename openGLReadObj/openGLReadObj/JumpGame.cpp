@@ -34,7 +34,7 @@ namespace lmm {
 		for (auto it = cube_array_.begin(); it != cube_array_.end(); it++) {
 			it->draw(projection, view, model, glm::vec2(0.0f, 0.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 		}
-
+		light_->draw(projection, view, model, glm::vec2(0.0f, 0.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 	}
 
 	void JumpGame::checkCollision()
@@ -56,10 +56,13 @@ namespace lmm {
 		ResourceManager::LoadTexture("./images/container2.png", GL_TRUE, "cube2");
 
 		background = new Background(glm::vec2(0.0, 0.0), ResourceManager::GetShader("background"), ResourceManager::GetTexture("background"));
-		CubeRender cube(glm::vec3(0.0, 0.5, 0.0), ResourceManager::GetShader("cube"), ResourceManager::GetTexture("cube"));
+		CubeRender cube(glm::vec3(4.0, 0.5, 0.0), ResourceManager::GetShader("cube"), ResourceManager::GetTexture("cube"));
 		cube_array_.push_back(cube);
 		CubeRender cube2(glm::vec3(3.0, 0.5, 4.0), ResourceManager::GetShader("cube"), ResourceManager::GetTexture("cube2"));
 		cube_array_.push_back(cube2);
+		//建立一个灯泡
+		ResourceManager::LoadShader("./ball.vs", "./ball.fs", nullptr, "ball");
+		light_ = new Ball(glm::vec3(0.0, 2.0, 2.0), ResourceManager::GetShader("ball"), ResourceManager::GetTexture("cube2"));
 	}
 
 	void JumpGame::processInput(GLfloat dt)

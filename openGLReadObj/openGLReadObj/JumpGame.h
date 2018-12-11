@@ -5,6 +5,7 @@
 #include "ResourceManager.h"
 #include "CubeRender.h"
 #include "Camera.h"
+#include "Ball.h"
 namespace lmm {
 	enum GameState {
 		GAME_ACTIVE,
@@ -47,6 +48,7 @@ namespace lmm {
 		//CubeRender* cube_render;
 		std::vector<CubeRender> cube_array_;
 		Camera* camera;
+		Ball* light_;
 		float last_x_;
 		float last_y_;
 		bool first_mouse_;
