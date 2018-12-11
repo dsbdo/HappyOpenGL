@@ -15,10 +15,14 @@ namespace lmm {
 		virtual void move();
 		virtual void reset();
 		virtual void initRenderData();
+		Texture texture_second;
 	private:
 		glm::vec3 position_;
 		Texture texture_;
 		Shader shader_;
+		GLuint top_VAO_;
+		GLuint bottom_VAO_;
+
 		std::vector<GLfloat> vertices_;
 		std::vector<GLuint> top_indices_;
 		std::vector<GLuint> middle_indices_;

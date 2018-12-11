@@ -14,7 +14,7 @@ enum CameraMovement {
 	ROTATE
 };
 const float YAW = -90.0f; //偏航角
-const float PITCH = -89.0f; //俯仰角
+const float PITCH = -0.0f; //俯仰角
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f; //鼠标灵敏度
 const float ZOOM = 45.0f; //摄像机视角
@@ -35,12 +35,13 @@ public:
 	float m_zoom;
 
 	//初始话相机
-	Camera(glm::vec3 camera_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f), float camera_yaw = YAW, float camera_pitch = PITCH) :m_camera_front(glm::vec3(0.0f, 0.0f, -1.0f)), m_movement_speed(SPEED), m_mouse_sensitivity(SENSITIVITY), m_zoom(ZOOM) {
+	Camera(glm::vec3 camera_position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 world_up = glm::vec3(0.0f, 1.0f, 0.0f), float camera_yaw = YAW, float camera_pitch = PITCH) :m_camera_front(glm::vec3(0.0f, 0.0f, 0.0f)), m_movement_speed(SPEED), m_mouse_sensitivity(SENSITIVITY), m_zoom(ZOOM) {
 		//这不简直有毒，还不如直接初始话，后面再改
 		m_camera_position = camera_position;
 		m_world_up = world_up;
 		m_yaw = camera_yaw;
 		m_pitch = camera_pitch;
+		updateCameraVectors();
 	}
 
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float camera_yaw, float camera_pitch) {
@@ -53,10 +54,11 @@ public:
 		m_yaw = camera_yaw;
 		m_pitch = camera_pitch;
 	}
+	
 	glm::mat4 GetViewMatrix() {
-		//
-		return glm::lookAt(m_camera_position, m_camera_position + m_camera_front, m_camera_up);
+		return glm::lookAt(m_camera_position, m_camera_front, m_camera_up);
 	}
+
 	void ProcessKeyboard(CameraMovement direction, float deltaTime)
 	{
 		float velocity = m_movement_speed * deltaTime;
@@ -65,16 +67,13 @@ public:
 		if (direction == BACKWARD)
 			m_camera_position -= m_camera_front * velocity;
 		if (direction == LEFT)
-			m_camera_position -= m_camera_right * velocity;
+			m_camera_position -= m_camera_right * velocity ;
 		if (direction == RIGHT)
-			m_camera_position += m_camera_right * velocity;
+			m_camera_position += m_camera_right * velocity ;
 		if (direction == ROTATE) {
 
 		}
-	/*	if () {
-			float camX = sin(glfwGetTime()) * radius;
-			float camZ = cos(glfwGetTime()) * radius;
-		}*/
+		
 	}
 	void updateCameraPosition(glm::vec3 position) {
 		m_camera_position = position;
@@ -117,7 +116,7 @@ public:
 private:
 	void updateCameraVectors()
 	{
-		// Calculate the new Front vector
+		//// Calculate the new Front vector
 		glm::vec3 front;
 		front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
 		front.y =  sin(glm::radians(m_pitch));
