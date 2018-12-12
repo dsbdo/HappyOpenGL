@@ -18,21 +18,39 @@ namespace lmm {
 	void Ball::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::vec2 size, GLfloat rotate, glm::vec3 color)
 	{
 		this->shader_.use();
+		this->shader_.setInt("image", 3);
+		glActiveTexture(GL_TEXTURE3);
+		this->texture_.bind();
+
 		//this->shader_ no texture
 		model = glm::translate(model, this->position_);
 		this->shader_.setMat4("model", model);
 		this->shader_.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-
 		this->shader_.setMat4("view", view);
 
-		glBindVertexArray(this->VAO_);
+		glBindVertexArray(this->top_VAO_);
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		glDrawElements(GL_LINE_STRIP, indices.size(), GL_UNSIGNED_INT, (void*)0); // we use index buffer, so set it to null.  
+		glDrawElements(GL_TRIANGLE_FAN, top_indices_.size(), GL_UNSIGNED_INT, (void*)0); // we use index buffer, so set it to null.  
 		//glDrawArrays(GL_TRIANGLES, 0, 30 * 3);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
+		glBindVertexArray(this->bottom_VAO_);
+		glDrawElements(GL_TRIANGLE_FAN, bottom_indices_.size(), GL_UNSIGNED_INT, (void*)0);
+		glBindVertexArray(0);
+
+		//this->shader_.setInt("image", 5);
+		//glActiveTexture(GL_TEXTURE5);
+		//texture_second.bind();
+
+		glBindVertexArray(this->VAO_);
+		glDrawElements(GL_TRIANGLE_FAN, middle_indices_.size(), GL_UNSIGNED_INT, (void*)0);
+		glBindVertexArray(0);
+
+
+
+
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
@@ -44,11 +62,11 @@ namespace lmm {
 	}
 	void Ball::initRenderData()
 	{
-		float radius = 0.5;
-		//¾­¶È·½Ïò
+		float radius = 1;
+		//ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½
 		const int k_VERTICAL_SLICE = 100;
 		float vertical_step = (float)(glm::two_pi<float>() / k_VERTICAL_SLICE);
-		//Î³¶È·½Ïò
+		//Î³ï¿½È·ï¿½ï¿½ï¿½
 		const int k_HORIZONTAL_SLICE = 50;
 		float horizontal_step = (float)(glm::pi<float>() / k_HORIZONTAL_SLICE);
 		GLuint start_index = 0;
@@ -64,11 +82,8 @@ namespace lmm {
 				top_indices_.push_back(0);
 			}
 			else if (i == k_HORIZONTAL_SLICE - 1) {
-				//×îºóÒ»È¦µÄ¿ªÊ¼×ø±ê
-				bottom_indices_.push_back(k_VERTICAL_SLICE * (i + 1));
-			}
-			else {
-				middle_indices_.push_back(i * k_VERTICAL_SLICE + 0);
+				//ï¿½ï¿½ï¿½Ò»È¦ï¿½Ä¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+				bottom_indices_.push_back((k_VERTICAL_SLICE + 1 ) * (i + 1));
 			}
 			for (GLuint j = 0; j <= k_VERTICAL_SLICE; j++) {
 				float horiaontal_angle = vertical_step * j;
@@ -79,142 +94,90 @@ namespace lmm {
 					vertices_.push_back(vertices_[start_index]);
 					vertices_.push_back(vertices_[start_index + 1]);
 					vertices_.push_back(vertices_[start_index + 2]);
+					vertices_.push_back(vertices_[start_index + 3]);
+					vertices_.push_back(vertices_[start_index + 4]);
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				}
 				else {
 					//change the coordinate
 					vertices_.push_back(x_coord);
 					vertices_.push_back(z_coord);
 					vertices_.push_back(y_coord);
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					float x_coord_temp = x_coord / 2.0f;
+					float y_coord_temp = y_coord / 2.0f;
+					
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					vertices_.push_back(x_coord_temp);
+					vertices_.push_back(y_coord_temp);
 				}
 				current_index += 3;
-				if (i > 0 && j > 0) {
+				if (i > 0) {
 					if (i == 1 ) {
-						top_indices_.push_back(i * k_VERTICAL_SLICE + j);
+						top_indices_.push_back(i * k_VERTICAL_SLICE + j + i);
 					}
 					else if (i == k_HORIZONTAL_SLICE - 1) {
-						bottom_indices_.push_back(i * k_VERTICAL_SLICE + k_VERTICAL_SLICE - j);
+						bottom_indices_.push_back(i * k_VERTICAL_SLICE + k_VERTICAL_SLICE - j + i);
 					}
-					else {
-						//ÖÐ¼äµÄÔ²»·
-						middle_indices_.push_back(i * k_VERTICAL_SLICE + j );
-						middle_indices_.push_back((i - 1)* k_VERTICAL_SLICE + j - 1);
-					}
-					if (j == k_VERTICAL_SLICE) {
-						//
+					else  if (i >= 2 && i < k_HORIZONTAL_SLICE - 1) {
+						//ï¿½Ð¼ï¿½ï¿½Ô²ï¿½ï¿½
+						middle_indices_.push_back(i* k_VERTICAL_SLICE + j + i);
 
-
+						middle_indices_.push_back((i + 1) * k_VERTICAL_SLICE + j + (i + 1));
 					}
 				}
-				
-			}
-			if (i > 0) {
-
-				//unsigned int bottom_ring_a = (k_VERTICAL_SLICE + 1) * i + j;
-				//unsigned int bottom_ring_b = (k_VERTICAL_SLICE + 1) * i + j - 1;
-				////next ring
-				//unsigned int top_ring_a = (k_VERTICAL_SLICE + 1) * (i -1) + j;
-				//unsigned int top_ring_b = (k_VERTICAL_SLICE + 1) * (i - 1) + j - 1;
-				////j == 1
-				//if (j == 1) {
-				//	indices_.push_back(bottom_ring_a);
-				//	indices_.push_back(top_ring_a);
-				//	indices_.push_back(top_ring_b);
-				//}
-				////j == 
-				//else if (j == k_HORIZONTAL_SLICE) {
-				//	indices_.push_back(bottom_ring_a);
-				//	indices_.push_back(top_ring_a);
-				//	indices_.push_back(bottom_ring_b);
-				//}
-				//else {
-				//	// ÄæÊ±ÖÓ·½ÏòÁ¬½Ó¶¥µã£¬Ã¿´ÎÁ¬½Ó³ÉÒ»¸öËÄ±ßÐÎ
-				//	// ÄæÊ±ÖÓ·½Ïò±ÜÃâÈý½ÇÐÎ±»±³ÃæÌÞ³ý´¦Àíµô
-				//	indices_.push_back(bottom_ring_a);
-				//	indices_.push_back(top_ring_a);
-				//	indices_.push_back(top_ring_b);
-				//	indices_.push_back(bottom_ring_a);
-				//	indices_.push_back(top_ring_b);
-				//	indices_.push_back(bottom_ring_b);
-				//}
-				//»­Èý½ÇÐÎµÄ×ø±ê¶¨Î»
 				
 			}
 		}
 		
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½
 		GLuint VBO, IBO;
 		glGenVertexArrays(1, &this->VAO_);
 		glBindVertexArray(this->VAO_);
+
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof(GLfloat), vertices_.data(), GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
 		glEnableVertexAttribArray(0);
+
+
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3*sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
 		//indices
 		glGenBuffers(1, &IBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLfloat), indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, middle_indices_.size() * sizeof(GLfloat), middle_indices_.data(), GL_STATIC_DRAW);
+		
+		//ï¿½ï¿½ï¿½å¶¥ï¿½ï¿½ï¿½ï¿½
+		glGenVertexArrays(1, &this->top_VAO_);
+		glBindVertexArray(this->top_VAO_);
+
+	
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
+		glGenBuffers(1, &IBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, top_indices_.size() * sizeof(GLfloat), top_indices_.data(), GL_STATIC_DRAW);
+		//ï¿½ï¿½ï¿½ï¿½×²ï¿½ï¿½ï¿½
+		glGenVertexArrays(1, &this->bottom_VAO_);
+		glBindVertexArray(this->bottom_VAO_);
+
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
+
+		glGenBuffers(1, &IBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, bottom_indices_.size() * sizeof(GLfloat), bottom_indices_.data(), GL_STATIC_DRAW);
 
 		//unbind
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
-
-		//GLfloat circle_vertex[30 * 3 * 5];
-		//GLfloat theta = 0;
-		//GLfloat radius = 1;
-		//const GLfloat M_PI = 3.1415926;
-		//for (int i = 0; i < 30; i++) {
-		//	theta = i * 12;
-		//	//µÚÒ»¸öµã
-		//	circle_vertex[i * 3 * 5] = 0;
-		//	circle_vertex[i * 3 * 5 + 1] = 0;
-		//	circle_vertex[i * 3 * 5 + 2] = 0;
-		//	circle_vertex[i * 3 * 5 + 3] = 0;
-		//	circle_vertex[i * 3 * 5 + 4] = 0;
-		//	//µÚ¶þ¸öµã	  i * 3 * 5
-		//	circle_vertex[i * 3 * 5 + 5] = (GLfloat)radius * cosf(theta * M_PI / 180.0f);
-		//	circle_vertex[i * 3 * 5 + 6] = 0;
-		//	circle_vertex[i * 3 * 5 + 7] = (GLfloat)radius * sinf(theta * M_PI / 180.0f);
-		//	circle_vertex[i * 3 * 5 + 8] = 1;
-		//	circle_vertex[i * 3 * 5 + 9] = 0;
-
-		//	//µÚÈý¸öµã	  i * 3 * 5
-		//	theta += 12;
-		//	circle_vertex[i * 3 * 5 + 10] = (GLfloat)radius * cosf(theta * M_PI / 180.0f);
-		//	circle_vertex[i * 3 * 5 + 11] = 0;
-		//	circle_vertex[i * 3 * 5 + 12] = (GLfloat)radius * sinf(theta * M_PI / 180.0f);
-		//	circle_vertex[i * 3 * 5 + 13] = 1;
-		//	circle_vertex[i * 3 * 5 + 14] = 1;
-
-		//}
-
-		//GLuint VBO, IBO;
-
-		//glGenVertexArrays(1, &this->VAO_);
-
-		//glGenBuffers(1, &VBO);
-		//glGenBuffers(1, &IBO);
-		////bind VAO
-
-
-		//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(circle_vertex), circle_vertex, GL_STATIC_DRAW);
-
-		//glBindVertexArray(this->VAO_);
-		////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		////glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(this->vertex_index_), this->vertex_index_, GL_STATIC_DRAW);
-
-
-		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
-		//glEnableVertexAttribArray(0);
-		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-		//glEnableVertexAttribArray(1);
-
-		//// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-		////ÕâÒ»ÖÖÇé¿öÊÇÔÊÐí½â¿ª°ó¶¨µÄ£¬ÒòÎªVAOÔÚÕâÀïÊÇ¼ÇÂ¼glVertexAttribPointer µÄ¼ÇÂ¼Çé¿ö
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
-		////µ±Ä¿±êÊÇGL_ELEMENT_ARRAY_BUFFERµÄÊ±ºò£¬VAO»á´¢´æglBindBufferµÄº¯Êýµ÷ÓÃ¡£ÕâÒ²ÒâÎ¶×ÅËüÒ²»á´¢´æ½â°óµ÷ÓÃ£¬ËùÒÔÈ·±£ÄãÃ»ÓÐÔÚ½â°óVAOÖ®Ç°½â°óË÷ÒýÊý×é»º³å£¬·ñÔòËü¾ÍÃ»ÓÐÕâ¸öEBOÅäÖÃÁË¡£
-		////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		//glBindVertexArray(0);
 	}
 }//namespace lmm over
 
